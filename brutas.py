@@ -16,7 +16,7 @@ cmdDictionary = {'ipAddress': 'grep -sonrHaE \"\\b(25[0-5]|2[0-4][0-9]|[01]?[0-9
                  'searWords': ' -rHna',
                  'urlSearch': 'grep -sonrHaE \'\\b(https?|ftp|file|http)://[a-zA-Z.-]*/[a-zA-Z0-9+-]*/[a-zA-Z0-9.,-+]*\'',
                  'pathSearc': 'grep -sonrHaE \'^[^/]*/[^/]*/[^/]*/[^_]*$\'',
-                 'passSearc': 'grep -sonrHaE \'\$1\$...............................\''
+                 'passSearc': 'grep -sonrHaE \'\$1\$...........................\''
                 }
 
 wordList = ['backdoor',
@@ -165,7 +165,8 @@ def extractPath():
     outputfile.write("".join(list(set(paths))))
     #print paths
     print "\t-->Found " + str(listCount(paths)) + " \"Look-a-Like\" UNIX paths"
-    print "You can use them with bruteLinks.py"
+    if listCount(paths) > 0:
+        print "You can use them with `bruteLinks.py`"
 
 
 def extractPasswd():
@@ -177,12 +178,14 @@ def extractPasswd():
     cmd = cmdDictionary['passSearc'] + " " + dest
     #print cmd
     for passwd in run_command(cmd):
-        print passwd
+        #print passwd
         passwds.append(passwd.split(':', 2)[-1])
 
     outputfile.write("".join(list(set(passwds))))
     #print passwds
     print "\t-->Found " + str(listCount(passwds)) + " \"Look-a-Like\" UNIX passwords"
+    if listCount(passwds) > 0:
+        print "You can use `john` to crack the password found (john results/passwd.txt --show)"
 
 
 def main():
